@@ -34,6 +34,26 @@ def request_emotion(content):
         print("Error:", e)
         time.sleep(10)
         return None
+
+def request_comment(content):
+    flask_url = f'http://{settings.FLASK_URL}:5000/get_comment'
+    try:
+        # HTTP POST 요청으로 prompt를 Flask에 전송
+        response = requests.post(flask_url, json={'content': content},verify=False, timeout=50)
+        # 응답 확인
+        if response.status_code == 200:
+            response_data = response.json()
+            comment = response_data['comment']
+            print("Received comment:", comment)
+            time.sleep(2)
+            return comment
+        else:
+            print("Failed to get comment from Flask:", response.status_code)
+            return None
+    except Exception as e:
+        print("Error:", e)
+        time.sleep(10)
+        return None
     
 class EmotionViewSet(GenericViewSet,
                   mixins.ListModelMixin,
@@ -53,7 +73,7 @@ class EmotionViewSet(GenericViewSet,
         diary_id = request.data.get('diary')
         diary = get_object_or_404(Diary, id=diary_id, user=request.user)
         
-        chat = get_comment(diary.content)
+        chat = request_comment(diary.content)
         print(chat)#테스트용. 정상 생성
         
         label = request_emotion(diary.content)
