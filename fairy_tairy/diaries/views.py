@@ -78,7 +78,7 @@ class DiaryMusicViewSet(GenericViewSet,
     
     @action(detail=True, methods=['POST'])
     def connect_to_music(self, request, pk = None):
-        diary = self.get_object()
+        diary = serializer.validated_data.get('diary')
         response = request_music_from_flask(diary.content)
         best_music = response.get('most_similar_song')
         similar_songs = response.get('similar_songs')
@@ -97,7 +97,7 @@ class DiaryMusicViewSet(GenericViewSet,
     
     @action(detail=True, methods=['POST'])
     def disconnect_music(self, request, pk=None):
-        diary = self.get_object()
+        diary = serializer.validated_data.get('diary')
 
         # 연결을 해제하려면 해당 필드를 None으로 설정
         diary.music = None

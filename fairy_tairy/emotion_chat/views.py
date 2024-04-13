@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from fairy_tairy.permissions import *
-from ai.comment import get_comment
 from diaries.models import Diary
 from .models import *
 from .serializers import *
@@ -70,8 +69,10 @@ class EmotionViewSet(GenericViewSet,
         return super().filter_queryset(queryset)
     
     def create(self, request, *args, **kwargs):
-        diary_id = request.data.get('diary')
-        diary = get_object_or_404(Diary, id=diary_id, user=request.user)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        diary = self.get_queryset().filter(user=request.user).get(pk=serializer.validated_data.get('diary').pk)
         
         chat = request_comment(diary.content)
         print(chat)#테스트용. 정상 생성
@@ -86,14 +87,14 @@ class EmotionViewSet(GenericViewSet,
     
     
     def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
         instance = self.get_object()  # 기존 Emotion 객체 가져오기
-        diary = get_object_or_404(Diary, id=instance.diary, user=request.user)
-        chat = get_comment(diary.content)
+        diary = get_object_or_404(Diary, id=instance.diary.id, user=request.user)
+        
+        chat = request_comment(diary.content)
         label = request_emotion(diary.content)
-        print(chat)#테스트용. 정상 생성
         
         serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(diary=diary, chat=chat, emotion_label = label)  # 기존 Emotion 객체 업데이트
-
+        self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -14,12 +14,19 @@ class MusicViewSet(GenericViewSet,
                      mixins.ListModelMixin,
                      mixins.DestroyModelMixin):
     
-    permission_classes = [IsAuthenticated,IsOwner]
+    permission_classes = [IsAuthenticated]
     serializer_class = MusicSerializer
     queryset = Music.objects.all()
 
-    def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset.filter(user = self.request.user))
+    def list(self, request, *args, **kwargs):
+        # 현재 접속한 사용자의 모든 다이어리 ID 가져오기
+        diary_ids = request.user.diaries.values_list('id', flat=True)
+
+        # 다이어리에 연관된 음악 필터링
+        queryset = Music.objects.filter(diary__id__in=diary_ids)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class MusicAdminViewSet(GenericViewSet,
