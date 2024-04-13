@@ -94,7 +94,7 @@ class EmotionViewSet(GenericViewSet,
         chat = request_comment(diary.content)
         label = request_emotion(diary.content)
         
-        serializer = self.get_serializer(instance, data=request.data)
+        serializer = self.get_serializer(instance, data=request.data,chat=chat, emotion_label = label)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
