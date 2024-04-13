@@ -7,9 +7,10 @@ pip install boto3
 pip install django-rest-auth
 pip install django-allauth
 pip install django-environ 
-pip install transformers
 pip install pytorch-lightning
-pip install torch
 pip install 'openai==0.28.1'
 pip install 'drf-yasg==1.21.7'
 pip install boto3
+pip install dj_rest_auth
+pip install mysqlclient
+pip install djangorestframework-simplejwt
