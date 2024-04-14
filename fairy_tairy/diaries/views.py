@@ -102,7 +102,7 @@ class DiaryMusicViewSet(GenericViewSet,
             
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
+            serializer.save()
             
             return Response({'most_similar_song': instance.music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
@@ -118,7 +118,7 @@ class DiaryMusicViewSet(GenericViewSet,
             instance.music = None
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
+            serializer.save()
             
             return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
         else:
