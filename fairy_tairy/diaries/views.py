@@ -68,6 +68,8 @@ class DiaryAdminViewSet(GenericViewSet,
 
 class DiaryMusicViewSet(GenericViewSet,
                         mixins.RetrieveModelMixin,
+                        mixins.UpdateModelMixin,
+                        mixins.DestroyModelMixin,
                         mixins.ListModelMixin):
     
     permission_classes = [IsOwner]
@@ -87,7 +89,9 @@ class DiaryMusicViewSet(GenericViewSet,
         print(instance.content)
         response = request_music_from_flask(instance.content)
         best_music = response.get('most_similar_song')
+        print(best_music)
         similar_songs = response.get('similar_songs')
+        print(similar_songs)
         if best_music:
             # 가져온 음악이 존재하는지 확인하고, 없으면 새로운 음악 생성
             music, created = Music.objects.get_or_create(music_title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
@@ -103,7 +107,7 @@ class DiaryMusicViewSet(GenericViewSet,
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
         
-    def partial_update(self, request,*args, **kwargs):
+    def destroy(self, request,*args, **kwargs):
         """
             현재 음악 연결 삭제
         """
