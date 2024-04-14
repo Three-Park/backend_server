@@ -1,8 +1,9 @@
 # backend_server
+**Do Not Edit EC2 Directly, Push and Pull to EC2 Server**
 
-EC2 Instance
+ - EC2 Instance
 
-Python 3.10.13
+- Python 3.10.13
 
 virtual environment : be_env
 
