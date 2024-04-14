@@ -97,13 +97,12 @@ class DiaryMusicViewSet(GenericViewSet,
             # 가져온 음악이 존재하는지 확인하고, 없으면 새로운 음악 생성
             music, created = Music.objects.get_or_create(music_title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
             
-            # 일기에 연결된 음악 업데이트
             instance.music = music
+            instance.save()
             
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
-            
-            serializer.save()
+            self.perform_update(serializer)
             
             return Response({'most_similar_song': instance.music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
@@ -117,9 +116,11 @@ class DiaryMusicViewSet(GenericViewSet,
         instance = self.get_object()
         if instance.music:
             instance.music = None
+            instance.save()
+            
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            self.perform_update(serializer)
             
             return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
         else:
