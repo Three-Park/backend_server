@@ -1,7 +1,7 @@
 from django.conf import settings 
 import openai
 
-with open("ai/genTextBase.txt", 'r', encoding='utf-8') as file:
+with open(f"{settings.BASE_DIR}/ai/genTextBase.txt", 'r', encoding='utf-8') as file:
     base_text = ''.join(file.readlines())
 
     api_key = settings.OPENAI_API_KEY
