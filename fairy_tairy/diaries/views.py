@@ -67,7 +67,9 @@ class DiaryAdminViewSet(GenericViewSet,
     
 
 class DiaryMusicViewSet(GenericViewSet,
-                  mixins.ListModelMixin):
+                        mixins.RetrieveModelMixin,
+                        mixins.ListModelMixin):
+    
     permission_classes = [IsOwner]
     serializer_class = DiaryMusicSerializer
     queryset = Diary.objects.all()
@@ -76,28 +78,41 @@ class DiaryMusicViewSet(GenericViewSet,
         queryset = queryset.filter(user = self.request.user)
         return super().filter_queryset(queryset)
     
-    def update(self, request,*args, **kwargs):
+    def retrieve(self, request,*args, **kwargs):
+        """
+            음악 추천 & best music저장/연결
+        """
         instance = self.get_object()
+        print(instance.content)
         response = request_music_from_flask(instance.content)
         best_music = response.get('most_similar_song')
         similar_songs = response.get('similar_songs')
         if best_music:
             # 가져온 음악이 존재하는지 확인하고, 없으면 새로운 음악 생성
-            music, created = Music.objects.get_or_create(title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
+            music, created = Music.objects.get_or_create(music_title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
             
             # 일기에 연결된 음악 업데이트
             instance.music = music
             instance.save()
-
+            
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
             return Response({'most_similar_song': instance.music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
         
     def partial_update(self, request,*args, **kwargs):
+        """
+            현재 음악 연결 삭제
+        """
         instance = self.get_object()
         if instance.music:
             instance.music = None
             instance.save()
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
             return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'No music to disconnect'}, status=status.HTTP_400_BAD_REQUEST)
