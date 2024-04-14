@@ -27,7 +27,7 @@ from rest_framework import permissions
 from users.views import FollowViewSet
 from books.views import BookViewSet, PageViewSet
 from images.views import ImageAdminViewSet, ImageViewSet
-from diaries.views import DiaryViewSet, DiaryAdminViewSet
+from diaries.views import DiaryViewSet, DiaryAdminViewSet, DiaryMusicViewSet
 from community.views import CommunityDiaryViewSet
 from emotion_chat.views import EmotionViewSet
 from recommend_music.views import MusicAdminViewSet, MusicViewSet
@@ -51,6 +51,7 @@ router.register(r'follow', FollowViewSet, basename='follow')
 router.register(r'books', BookViewSet, basename='books')
 router.register(r'pagies', PageViewSet, basename='pagies')
 router.register(r'diary', DiaryViewSet, basename='diary')
+router.register(r'diary_music', DiaryMusicViewSet, basename='diary_music')
 router.register(r'diary_admin', DiaryAdminViewSet, basename='diary_admin')
 router.register(r'emotion', EmotionViewSet, basename='emotion')
 router.register(r'image', ImageViewSet, basename='image')

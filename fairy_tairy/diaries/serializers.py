@@ -15,7 +15,7 @@ class DiaryMusicSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Diary
-        fields =['id', 'music']
+        fields =['id', 'user', 'content', 'music']
 
         
 class DiaryAdminSerializer(serializers.ModelSerializer):

@@ -76,10 +76,9 @@ class DiaryMusicViewSet(GenericViewSet,
         queryset = queryset.filter(user = self.request.user)
         return super().filter_queryset(queryset)
     
-    @action(detail=True, methods=['POST'])
-    def connect_to_music(self, request, pk = None):
-        diary = serializer.validated_data.get('diary')
-        response = request_music_from_flask(diary.content)
+    def update(self, request,*args, **kwargs):
+        instance = self.get_object()
+        response = request_music_from_flask(instance.content)
         best_music = response.get('most_similar_song')
         similar_songs = response.get('similar_songs')
         if best_music:
@@ -87,22 +86,18 @@ class DiaryMusicViewSet(GenericViewSet,
             music, created = Music.objects.get_or_create(title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
             
             # 일기에 연결된 음악 업데이트
-            diary.music = music
-            diary.save()
+            instance.music = music
+            instance.save()
 
-            serializer = self.get_serializer(diary)
-            return Response({'most_similar_song': serializer.data, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
+            return Response({'most_similar_song': instance.music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    @action(detail=True, methods=['POST'])
-    def disconnect_music(self, request, pk=None):
-        diary = serializer.validated_data.get('diary')
-
-        # 연결을 해제하려면 해당 필드를 None으로 설정
-        diary.music = None
-        diary.save()
-
-        serializer = self.get_serializer(diary)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
+        
+    def partial_update(self, request,*args, **kwargs):
+        instance = self.get_object()
+        if instance.music:
+            instance.music = None
+            instance.save()
+            return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'detail': 'No music to disconnect'}, status=status.HTTP_400_BAD_REQUEST)

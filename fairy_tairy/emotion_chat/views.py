@@ -71,9 +71,13 @@ class EmotionViewSet(GenericViewSet,
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        diary = self.get_queryset().filter(user=request.user).get(pk=serializer.validated_data.get('diary').pk)
-        
+    
+        diary = serializer.validated_data.get('diary')
+
+        # Diary 객체가 현재 사용자의 것이 아니면 404 오류를 발생시킵니다.
+        if diary.user != request.user:
+            return Response({'error': "Diary does not belong to the current user."}, status=status.HTTP_400_BAD_REQUEST)
+
         chat = request_comment(diary.content)
         print(chat)#테스트용. 정상 생성
         
