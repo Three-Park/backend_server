@@ -78,10 +78,11 @@ class DiaryMusicViewSet(GenericViewSet,
         queryset = queryset.filter(user = self.request.user)
         return super().filter_queryset(queryset)
     
-    def retrieve(self, request,*args, **kwargs):
+    def update(self, request,*args, **kwargs):
         """
             음악 추천 & best music저장/연결
         """
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
         print(instance.content)
         response = request_music_from_flask(instance.content)
@@ -93,11 +94,11 @@ class DiaryMusicViewSet(GenericViewSet,
             
             # 일기에 연결된 음악 업데이트
             instance.music = music
-            instance.save()
             
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
+            
             return Response({'most_similar_song': instance.music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
@@ -106,13 +107,14 @@ class DiaryMusicViewSet(GenericViewSet,
         """
             현재 음악 연결 삭제
         """
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
         if instance.music:
             instance.music = None
-            instance.save()
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
+            
             return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'No music to disconnect'}, status=status.HTTP_400_BAD_REQUEST)
