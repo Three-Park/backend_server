@@ -44,6 +44,7 @@ def request_image_from_flask(prompt):
 class ImageViewSet(GenericViewSet,
                      mixins.CreateModelMixin,
                      mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
                      mixins.DestroyModelMixin,
                      mixins.UpdateModelMixin):
 
@@ -86,31 +87,31 @@ class ImageViewSet(GenericViewSet,
 
         except Exception as e:
             return Response({'error': f"Error uploading image: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
 
-    # 이미지 삭제 기능
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    # 이미지 업데이트 기능
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
+        image_prompt = get_prompt(instance.diary.content)[0]
+        print(image_prompt)
+            
+        image_url = request_image_from_flask(image_prompt)
+        print('img: ',image_url)
+        if not image_url:
+            return Response({'error': "Failed to get image from Flask"}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance.image = image_url
+        instance.save()
+        
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        return Response(serializer.data)
-    
+            
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     
 class ImageAdminViewSet(GenericViewSet,
                      mixins.ListModelMixin,
+                     mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.DestroyModelMixin,
                      mixins.UpdateModelMixin):
@@ -151,21 +152,9 @@ class ImageAdminViewSet(GenericViewSet,
         except Exception as e:
             return Response({'error': f"Error uploading image: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
         
-        # 이미지 목록 조회 기능
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    # 이미지 삭제 기능
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
     # 이미지 업데이트 기능
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
