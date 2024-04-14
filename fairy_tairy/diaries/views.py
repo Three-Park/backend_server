@@ -108,7 +108,7 @@ class DiaryMusicViewSet(GenericViewSet,
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
         
-    def perform_destroy(self, request,*args, **kwargs):
+    def destroy(self, request,*args, **kwargs):
         """
             현재 음악 연결 삭제
         """
@@ -118,9 +118,9 @@ class DiaryMusicViewSet(GenericViewSet,
             instance.music = None
             instance.save()
             
-            serializer = self.get_serializer(instance, data=request.data, partial=partial)
-            serializer.is_valid(raise_exception=True)
-            self.perform_update(serializer)
+            # serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            # serializer.is_valid(raise_exception=True)
+            # self.perform_update(serializer)
             
             return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
         else:
