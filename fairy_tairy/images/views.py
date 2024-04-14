@@ -47,7 +47,7 @@ class ImageViewSet(GenericViewSet,
                      mixins.DestroyModelMixin,
                      mixins.UpdateModelMixin):
 
-    permission_classes = [IsOwner]
+    permission_classes = [IsAuthenticated]
     serializer_class = ImageSerializer
     queryset = Image.objects.all()
 
