@@ -104,7 +104,7 @@ class DiaryMusicViewSet(GenericViewSet,
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
             
-            return Response({'most_similar_song': instance.music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
+            return Response({'most_similar_song': best_music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
         
