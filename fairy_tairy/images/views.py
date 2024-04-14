@@ -110,7 +110,6 @@ class ImageViewSet(GenericViewSet,
     
     
 class ImageAdminViewSet(GenericViewSet,
-                     mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      mixins.DestroyModelMixin,
