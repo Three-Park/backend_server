@@ -16,7 +16,9 @@ from .serializers import *
 import time
 
 def request_music_from_flask(content):
-    # Flask 서버의 URL
+    """
+    diary content 를 ai서버에 전달, 음악 추천 받아옴
+    """
     flask_url = f'http://{settings.FLASK_URL}:5000/get_music'
     
     try:
@@ -48,10 +50,6 @@ class DiaryViewSet(GenericViewSet,
     def filter_queryset(self,queryset):
         queryset = queryset.filter(user=self.request.user)
         return super().filter_queryset(queryset)
-    
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return Diary.objects.filter(Q(user=user))
     
     
 class DiaryAdminViewSet(GenericViewSet,
@@ -94,7 +92,6 @@ class DiaryMusicViewSet(GenericViewSet,
         similar_songs = response.get('similar_songs')
         print(similar_songs)
         if best_music:
-            # 가져온 음악이 존재하는지 확인하고, 없으면 새로운 음악 생성
             music, created = Music.objects.get_or_create(music_title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
             
             instance.music = music
@@ -117,11 +114,7 @@ class DiaryMusicViewSet(GenericViewSet,
         if instance.music:
             instance.music = None
             instance.save()
-            
-            # serializer = self.get_serializer(instance, data=request.data, partial=partial)
-            # serializer.is_valid(raise_exception=True)
-            # self.perform_update(serializer)
-            
+
             return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'No music to disconnect'}, status=status.HTTP_400_BAD_REQUEST)

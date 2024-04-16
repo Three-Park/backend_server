@@ -9,7 +9,6 @@ class DiarySerializer(serializers.ModelSerializer):
         model = Diary
         fields = ['user','title','content','registered_at','last_update_at', 'is_open']
         
-    
         
 class DiaryMusicSerializer(serializers.ModelSerializer):
     music = MusicSerializer(required=False)
@@ -28,7 +27,6 @@ class DiaryMusicSerializer(serializers.ModelSerializer):
         
         return instance
 
-
         
 class DiaryAdminSerializer(serializers.ModelSerializer):
     music = MusicSerializer(required=False)
@@ -38,9 +36,3 @@ class DiaryAdminSerializer(serializers.ModelSerializer):
         model = Diary
         fields = '__all__'
 
-# class DiaryBookSerializer(serializers.ModelSerializer):
-#     book = BookSerializer(required=False)
-    
-#     class Meta:
-#         model = Diary
-#         fields = ['id', 'book']

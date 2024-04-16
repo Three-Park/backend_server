@@ -14,9 +14,7 @@ from .serializers import *
 
 class CommunityDiaryViewSet(GenericViewSet,
                   mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin):
     
     permission_classes = [IsFollowerOrOwner]

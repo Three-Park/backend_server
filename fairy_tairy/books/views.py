@@ -43,12 +43,18 @@ class PageViewSet(GenericViewSet,
         return super().filter_queryset(queryset)
     
     def destroy(self, request, *args, **kwargs):
+        """
+        delete book
+        """
         instance = self.get_object()
         instance.delete()  
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     @action(detail=True, methods=['GET'])
     def connect_book_diary(self, request, pk=None):
+        """
+        book에 다이어리를 page로 연결
+        """
         page = self.get_object()
         diary_id = request.data.get('diary')
         book_id = request.data.get('book')
