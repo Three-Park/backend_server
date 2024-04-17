@@ -15,6 +15,9 @@ import requests
 import time
 
 def request_emotion(content):
+    """
+    일기 내용으로 emootion label 검출
+    """
     flask_url = f'http://{settings.FLASK_URL}:5000/get_sentiment'
     try:
         # HTTP POST 요청으로 prompt를 Flask에 전송
@@ -35,6 +38,9 @@ def request_emotion(content):
         return None
 
 def request_comment(content):
+    """
+    일기 내용으로 응원 문구 생성
+    """
     flask_url = f'http://{settings.FLASK_URL}:5000/get_comment'
     try:
         # HTTP POST 요청으로 prompt를 Flask에 전송
@@ -69,20 +75,22 @@ class EmotionViewSet(GenericViewSet,
         return super().filter_queryset(queryset)
     
     def create(self, request, *args, **kwargs):
+        """
+        일기 내용으로 emotion label과 응원 문구 생성, 저정
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
     
         diary = serializer.validated_data.get('diary')
 
-        # Diary 객체가 현재 사용자의 것이 아니면 404 오류를 발생시킵니다.
         if diary.user != request.user:
             return Response({'error': "Diary does not belong to the current user."}, status=status.HTTP_400_BAD_REQUEST)
 
         chat = request_comment(diary.content)
-        print(chat)#테스트용. 정상 생성
+        #print(chat)#테스트용. 정상 생성
         
         label = request_emotion(diary.content)
-        print(label)
+        #print(label)
         
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -91,6 +99,9 @@ class EmotionViewSet(GenericViewSet,
     
     
     def update(self, request, *args, **kwargs):
+        """
+        일기 내용 변경된 경우 응원문구와 emotion label 업데이트
+        """
         partial = kwargs.pop('partial', False)
         instance = self.get_object()  # 기존 Emotion 객체 가져오기
         diary = get_object_or_404(Diary, id=instance.diary.id, user=request.user)

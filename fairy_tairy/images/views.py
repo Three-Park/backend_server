@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.conf import settings 
 from .serializers import *
 from .models import *
-from ai.generate_image import *
+from ai.generate_prompt import *
 from fairy_tairy.permissions import *
 
 import requests
@@ -17,8 +17,9 @@ import uuid
 import time
 
 def request_image_from_flask(prompt):
-    # Flask 서버의 URL
-    # flask_url = 'http://localhost:5000/get_image'
+    """
+    생성된 prompt로 이미지 생성
+    """
     flask_url = f'http://{settings.FLASK_URL}:5000/get_image'
     
     try:

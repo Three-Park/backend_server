@@ -8,6 +8,9 @@ with open(f"{settings.BASE_DIR}/ai/genTextBase.txt", 'r', encoding='utf-8') as f
     openai.api_key=api_key
     
 def get_prompt(content):
+    """
+    일기 내용을 입력받아 프롬프트 생성
+    """
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": f"{base_text} {content.strip()}"},]
