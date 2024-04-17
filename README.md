@@ -6,7 +6,8 @@
 - Python 3.10.13
 
 ### set environment
-    sh install_packages_be.sh
+    chmod +x install_packages.sh
+    ./install_packages.sh
 
 ### activate environment (server)
 virtual environment : be_env
