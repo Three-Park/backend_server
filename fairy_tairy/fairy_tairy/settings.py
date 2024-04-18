@@ -119,10 +119,10 @@ REST_FRAMEWORK = {
 
 REST_AUTH = {
     'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'access-token',
+    'JWT_AUTH_COOKIE': 'my-app-auth',
     
     # want refresh token
-    'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
+    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
     # set refresh token http only (security essue)
     'JWT_AUTH_HTTPONLY': False,
     # JWT 쿠키 csrf 검사
