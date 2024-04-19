@@ -161,7 +161,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 CORS_ALLOWED_ORIGINS = [
-    '*',  # 클라이언트의 주소로 변경해야 합니다.
+    'http://localhost:8081', 
+    'http://43.202.125.125:8000'# 클라이언트의 주소로 변경해야 합니다.
 ]
 CORS_ALLOW_HEADERS = [
     'accept',
