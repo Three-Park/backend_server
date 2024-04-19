@@ -141,12 +141,12 @@ JWT_AUTH = {
 }
 
 
-# AUTHENTICATION_BACKENDS = [
-#     'django.contrib.auth.backends.ModelBackend',
-#     'allauth.account.auth_backends.AuthenticationBackend',
-#     'rest_framework.authentication.BasicAuthentication',
-#     'rest_framework.authentication.TokenAuthentication',
-# ]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'rest_framework.authentication.BasicAuthentication',
+    # 'rest_framework.authentication.TokenAuthentication',
+]
 
 
 MIDDLEWARE = [
