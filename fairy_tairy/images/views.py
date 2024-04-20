@@ -79,14 +79,14 @@ class ImageViewSet(GenericViewSet,
                 existing_image.image = image_url
                 existing_image.save()
                 serializer = self.get_serializer(existing_image)
-                return Response({"message": "Image updated successfully", "image": serializer.data}, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_200_OK)
                 
             else:
                 # 이미지가 존재하지 않으면 새로운 이미지를 생성
                 print('save')
                 new_image = Image.objects.get_or_create(diary=diary, image_url=image_url, image_prompt=image_prompt)
                 serializer = self.get_serializer(new_image)
-                return Response({"message": "Image uploaded successfully", "image": serializer.data}, status=status.HTTP_201_CREATED)
+                return Response( serializer.data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({'error': f"Error uploading image: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
