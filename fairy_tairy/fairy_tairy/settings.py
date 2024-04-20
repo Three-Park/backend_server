@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from storages.backends.s3boto3 import S3Boto3Storage
-import datetime
+from datetime import datetime, timedelta
 import environ
 from pathlib import Path
 import os
@@ -59,7 +59,9 @@ INSTALLED_APPS = [
     
     #DRF Authentication
     'rest_framework.authtoken',
+    
     # 'rest_framework_simplejwt',
+    'rest_framework_simplejwt',
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'django.contrib.sites',
@@ -118,10 +120,11 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         # "rest_framework.authentication.SessionAuthentication",
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     # 'DEFAULT_FILTER_BACKENDS':[
     #     'rest_framework.filters.DjangoFilterBackend',
@@ -135,10 +138,10 @@ REST_FRAMEWORK = {
 
 REST_AUTH = {
     'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'my-app-auth',
+    'JWT_AUTH_COOKIE': 'access_token',
     
     # want refresh token
-    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'JWT_AUTH_REFRESH_COOKIE': 'refresh_token',
     # set refresh token http only (security essue)
     'JWT_AUTH_HTTPONLY': False,
     # JWT 쿠키 csrf 검사
@@ -154,7 +157,10 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
 }
 
-
+SIMPLE_JWT = {
+   "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+   "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
