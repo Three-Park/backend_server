@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from storages.backends.s3boto3 import S3Boto3Storage
-from datetime import datetime, timedelta
+import datetime
+from datetime import timedelta
 import environ
 from pathlib import Path
 import os
