@@ -78,7 +78,7 @@ class ImageViewSet(GenericViewSet,
                 print('ex')
                 existing_image.image = image_url
                 existing_image.save()
-                serializer = self.get_serializer(existing_image)
+                serializer = self.get_serializer(instance=existing_image)
                 return Response(serializer.data, status=status.HTTP_200_OK)
                 
             else:
@@ -86,9 +86,9 @@ class ImageViewSet(GenericViewSet,
                 print('save')
                 new_image = Image.objects.get_or_create(diary=diary, image_url=image_url, image_prompt=image_prompt)
                 print(new_image)
-                serializer = self.get_serializer(new_image)
+                serializer = self.get_serializer(instance=new_image)
                 print(f'SERIALIZER:{serializer}')
-                return Response( serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({'error': f"Error uploading image: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
