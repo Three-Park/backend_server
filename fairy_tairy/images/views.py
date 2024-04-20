@@ -85,7 +85,9 @@ class ImageViewSet(GenericViewSet,
                 # 이미지가 존재하지 않으면 새로운 이미지를 생성
                 print('save')
                 new_image = Image.objects.get_or_create(diary=diary, image_url=image_url, image_prompt=image_prompt)
+                print(new_image)
                 serializer = self.get_serializer(new_image)
+                print(f'SERIALIZER:{serializer}')
                 return Response( serializer.data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
