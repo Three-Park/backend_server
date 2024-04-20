@@ -78,7 +78,9 @@ class ImageViewSet(GenericViewSet,
                 print('ex')
                 existing_image.image = image_url
                 existing_image.save()
-                serializer = self.get_serializer(instance=existing_image)
+                serializer.image_url=image_url
+                serializer.image_prompt=image_prompt
+                
                 return Response(serializer.data, status=status.HTTP_200_OK)
                 
             else:
@@ -86,7 +88,9 @@ class ImageViewSet(GenericViewSet,
                 print('save')
                 new_image = Image.objects.get_or_create(diary=diary, image_url=image_url, image_prompt=image_prompt)
                 print(new_image)
-                serializer = self.get_serializer(instance=new_image)
+                serializer.diary=diary
+                serializer.image_url=image_url
+                serializer.image_prompt=image_prompt
                 print(f'SERIALIZER:{serializer}')
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
