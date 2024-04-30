@@ -15,6 +15,10 @@ from fairy_tairy.permissions import *
 from .serializers import *
 import time
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
+
 def request_music_from_flask(content):
     """
     diary content 를 ai서버에 전달, 음악 추천 받아옴
@@ -79,9 +83,53 @@ class DiaryMusicViewSet(GenericViewSet,
         queryset = queryset.filter(user = self.request.user)
         return super().filter_queryset(queryset)
     
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'content': openapi.Schema(type=openapi.TYPE_STRING),
+            },
+            required=['user','content']
+        ),
+        responses={
+            200: openapi.Response(description="OK", examples={
+                'application/json': {
+                    'most_similar_song': {
+                        'artist': 'Artist Name',
+                        'genre': 'Genre Name',
+                        'title': 'Song Title',
+                    },
+                    'similar_songs': [
+                        {
+                            'artist': 'Artist Name',
+                            'genre': 'Genre Name',
+                            'title': 'Song Title',
+                        },
+                        {
+                            'artist': 'Artist Name',
+                            'genre': 'Genre Name',
+                            'title': 'Song Title',
+                        },
+                        {
+                            'artist': 'Artist Name',
+                            'genre': 'Genre Name',
+                            'title': 'Song Title',
+                        },
+                        {
+                            'artist': 'Artist Name',
+                            'genre': 'Genre Name',
+                            'title': 'Song Title',
+                        },
+                    ]
+                }
+            }),
+            400: "Bad Request",
+        },
+    )
     def update(self, request,*args, **kwargs):
         """
-            음악 추천 & best music저장/연결
+        음악 추천 & best music저장/연결
         """
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
@@ -104,10 +152,16 @@ class DiaryMusicViewSet(GenericViewSet,
             return Response({'most_similar_song': best_music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
-        
+    
+    @swagger_auto_schema(
+        responses={
+            200: "OK",
+            400: "Bad Request",
+        },
+    )
     def destroy(self, request,*args, **kwargs):
         """
-            현재 음악 연결 삭제
+        현재 일기의 음악 연결 삭제
         """
         partial = kwargs.pop('partial', True)
         instance = self.get_object()

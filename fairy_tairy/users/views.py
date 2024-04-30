@@ -11,6 +11,9 @@ from rest_framework import status
 from .models import Follow
 from .serializers import FollowSerializer
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 from .serializers import *
 from fairy_tairy.permissions import *
 
@@ -25,7 +28,23 @@ class FollowViewSet(GenericViewSet,
     serializer_class = FollowSerializer
     queryset = Follow.objects.all()
     
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'following_user': openapi.Schema(type=openapi.TYPE_INTEGER, description="User ID of the user you want to follow"),
+            },
+            required=['following_user']
+        ),
+        responses={
+            status.HTTP_201_CREATED: "Follow request sent successfully",
+            status.HTTP_400_BAD_REQUEST: "Bad Request",
+        }
+    )
     def create(self, request, *args, **kwargs):
+        '''
+        Send Follow Request
+        '''
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -44,36 +63,44 @@ class FollowViewSet(GenericViewSet,
         else:
             return Response({"message": f"Follow request already sent to {followee.username}"}, status=status.HTTP_400_BAD_REQUEST)
 
-
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_204_NO_CONTENT: "Follow request deleted successfully",
+        }
+    )
     def destroy(self, request, *args, **kwargs):
+        '''
+        Delete Follow Request
+        '''
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response({"message": "Follow request deleted"}, status=status.HTTP_204_NO_CONTENT)
 
-
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: "Follow request accepted successfully",
+        }
+    )
     def update(self, request, *args, **kwargs):
+        '''
+        Accept Follow Request
+        '''
         instance = self.get_object()
         instance.status = Follow.ACCEPTED
         instance.save()
         return Response({"message": "Follow request accepted"}, status=status.HTTP_200_OK)
 
-
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: "Follow request rejected successfully",
+        }
+    )
     def partial_update(self, request, *args, **kwargs):
+        '''
+        Reject Follow Request
+        '''
         instance = self.get_object()
         instance.status = Follow.REJECTED
         instance.save()
         return Response({"message": "Follow request rejected"}, status=status.HTTP_200_OK)
        
-        
-# class UserViewSet(GenericViewSet,
-#                      mixins.ListModelMixin,
-#                      mixins.UpdateModelMixin):
-
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [IsOwner]
-    
-#     def filter_queryset(self,queryset):
-#         queryset = queryset.filter(user=self.request.user)
-#         return super().filter_queryset(queryset)
- 

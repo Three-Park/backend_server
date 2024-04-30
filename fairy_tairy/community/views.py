@@ -11,11 +11,13 @@ from books.models import *
 from fairy_tairy.permissions import *
 from .serializers import *
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+
 
 class CommunityDiaryViewSet(GenericViewSet,
                   mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin,
-                  mixins.DestroyModelMixin):
+                  mixins.RetrieveModelMixin):
     
     permission_classes = [IsFollowerOrOwner]
     serializer_class = CommunityDiarySerializer
@@ -32,3 +34,32 @@ class CommunityDiaryViewSet(GenericViewSet,
         return Diary.objects.filter(Q(user=user, is_open=True)|
                                     Q(user__in=followed_users_1, is_open=True) | 
                                     Q(user__in=followed_users_2, is_open=True))
+        
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('user', openapi.IN_QUERY, description="Filter diaries by user ID", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('is_open', openapi.IN_QUERY, description="Filter diaries by openness", type=openapi.TYPE_BOOLEAN),
+        ],
+        responses={
+            200: CommunityDiarySerializer(many=True),
+            404: "Not Found",
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        """
+        List community diaries filtered by user ID and openness.
+        """
+        return super().list(request, *args, **kwargs)
+
+
+    @swagger_auto_schema(
+        responses={
+            200: CommunityDiarySerializer(),
+            404: "Not Found",
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve a community diary by ID.
+        """
+        return super().retrieve(request, *args, **kwargs)

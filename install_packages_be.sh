@@ -15,3 +15,4 @@ pip install dj_rest_auth
 pip install mysqlclient
 pip install djangorestframework-simplejwt
 pip install django-cors-headers
+pip install flex
