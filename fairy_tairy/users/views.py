@@ -9,7 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Follow
-from .serializers import FollowSerializer
+from .serializers import FollowSerializer, FollowBodySerializer
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -30,10 +30,7 @@ class FollowViewSet(GenericViewSet,
     
     @swagger_auto_schema(
         request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'following_user': openapi.Schema(type=openapi.TYPE_INTEGER, description="User ID of the user you want to follow"),
-            },
+            request_body=FollowBodySerializer,
             required=['following_user']
         ),
         responses={

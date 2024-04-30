@@ -69,7 +69,6 @@ class DiaryAdminViewSet(GenericViewSet,
     
 
 class DiaryMusicViewSet(GenericViewSet,
-                        mixins.CreateModelMixin,
                         mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
                         mixins.DestroyModelMixin,
