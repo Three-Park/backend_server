@@ -30,8 +30,7 @@ class FollowViewSet(GenericViewSet,
     
     @swagger_auto_schema(
         request_body=openapi.Schema(
-            request_body=FollowBodySerializer,
-            required=['following_user']
+            request_body=FollowBodySerializer
         ),
         responses={
             status.HTTP_201_CREATED: "Follow request sent successfully",
