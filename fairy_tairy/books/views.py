@@ -116,7 +116,6 @@ class PageViewSet(GenericViewSet,
             400: "Bad Request",
         },
     )
-    @action(detail=True, methods=['POST'])
     def create(self, request, pk=None):
         """
         Connect a diary to a page within a book.
