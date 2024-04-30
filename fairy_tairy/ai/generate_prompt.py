@@ -17,6 +17,7 @@ def get_prompt(content):
     )
     generated_text = completion["choices"][0]["message"]["content"]
     output_text=generated_text.split('\n')
+    pre_text = "(masterpiece,detailed), (Oil Painting:1.3), (Impressionism:1.3) ,(oil painting with brush strokes:1.2), (looking away:1.1)"
     prompts = [v for v in output_text if v]
-    prompts = "(masterpiece,detailed), (Oil Painting:1.3), (Impressionism:1.3) ,(oil painting with brush strokes:1.2), (looking away:1.1)"+ ", ".join(prompts)
+    prompts = pre_text.split(', ') + prompts
     return prompts
