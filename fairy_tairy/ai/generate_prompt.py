@@ -19,5 +19,5 @@ def get_prompt(content):
     output_text=generated_text.split('\n')
     pre_text = "(masterpiece,detailed), (Oil Painting:1.3), (Impressionism:1.3) ,(oil painting with brush strokes:1.2), (looking away:1.1)"
     prompts = [v for v in output_text if v]
-    prompts = pre_text.split(', ') + prompts
+    prompts = pre_text.split('\n') + prompts
     return prompts
