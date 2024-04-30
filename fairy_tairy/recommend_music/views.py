@@ -1,4 +1,3 @@
-from fairy_tairy.diaries.models import Diary
 from rest_framework import mixins,status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import GenericViewSet
@@ -9,6 +8,7 @@ from django.http import Http404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from diaries.models import Diary
 from .serializers import *
 from .models import *
 from fairy_tairy.permissions import *
