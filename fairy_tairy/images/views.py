@@ -86,15 +86,21 @@ class ImageViewSet(GenericViewSet,
                 "image_prompt": "이미지 생성 프롬프트",
                 "diary": 2
             }
-            401 unauthorized
             400
             {
                 'error': "Failed to get image from Flask"
             }
-            
             400
             {
                 'error': "Error uploading image: {str(e)}"
+            }
+            401 unauthorized
+            {
+                "detail": "자격 인증데이터(authentication credentials)가 제공되지 않았습니다."
+            }
+            403
+            {
+                "detail": "CSRF Failed: CSRF token missing."
             }
         '''
 

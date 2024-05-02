@@ -93,25 +93,24 @@ class DiaryMusicViewSet(GenericViewSet,
         음악 추천 & best music저장/연결하는 API
         
         ---
-        id = 일기 ID
-        ## 예시 request:
+        ### id = 일기 ID
+        ### 예시 request:
         
                 {
                     "user": 1,
-                    "content": "일기 내용 예시"
                 }
                 
-        ## 예시 response:
+        ### 예시 response:
                 200
                 {
                     "id": 1,
                     "user": 1,
-                    "content": "일기 내용",
+                    "content": "너무 두근거린다! 과연 rds에 내 다이어리가 잘 올라갈까? 오늘 이것만 성공하면 너무 즐거운 마음으로 잘 수 있을것 같다!",
                     "music": {
                         "id": 1,
-                        "music_title": "Best Music Title",
-                        "artist": "Best Artist",
-                        "genre": "Best Genre"
+                        "music_title": "그대만 있다면 (여름날 우리 X 너드커넥션 (Nerd Connection))",
+                        "artist": "너드커넥션 (Nerd Connection)",
+                        "genre": "발라드"
                     }
                 }
                 401 
@@ -121,17 +120,21 @@ class DiaryMusicViewSet(GenericViewSet,
         """
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        print(instance.content)
-        response = request_music_from_flask(instance.content)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        
+        print(serializer.data['content'])
+        response = request_music_from_flask(serializer.data['content'])
+        # print(instance.content)
+        # response = request_music_from_flask(instance.content)
         best_music = response.get('most_similar_song')
         print(best_music)
         similar_songs = response.get('similar_songs')
         print(similar_songs)
         if best_music:
             music, created = Music.objects.get_or_create(music_title=best_music['title'], artist=best_music['artist'], genre=best_music['genre'])
-            
             instance.music = music
-            instance.save()
+            # instance.save()
             
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
             serializer.is_valid(raise_exception=True)

@@ -8,7 +8,7 @@ class Diary(models.Model):
     music = models.ForeignKey(Music, on_delete=models.SET_NULL, blank=True, null=True)
     
     title = models.CharField(max_length = 30)
-    content = models.TextField()
+    content = models.TextField(blank=True)
     registered_at = models.DateTimeField(auto_now_add=True)
     last_update_at = models.DateTimeField(auto_now=True)
     is_open = models.BooleanField(default=False)
