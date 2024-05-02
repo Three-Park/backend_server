@@ -9,7 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Follow
-from .serializers import FollowSerializer, FollowBodySerializer
+from .serializers import FollowSerializer
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -27,19 +27,48 @@ class FollowViewSet(GenericViewSet,
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = FollowSerializer
     queryset = Follow.objects.all()
+
+    '''
+    팔로우 관련 API
     
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            request_body=FollowBodySerializer
-        ),
-        responses={
-            status.HTTP_201_CREATED: "Follow request sent successfully",
-            status.HTTP_400_BAD_REQUEST: "Bad Request",
-        }
-    )
+    ---
+    
+    ### id : 팔로우 요청의 id
+    '''
     def create(self, request, *args, **kwargs):
         '''
-        Send Follow Request
+        팔로우 요청
+        
+        ---
+        
+        ### id : 팔로우 요청의 id
+        
+        
+        ## 예시 request:
+        
+            {
+                follower: 본인의 유저 ID
+                following_user: 팔로우할 유저의 ID
+            }
+            
+        ## 예시 response:
+            201
+            {
+                id: 팔로우 요청의 ID,
+                follower: 팔로우를 요청한 사용자의 ID,
+                following_user: 팔로우를 요청받은 사용자의 ID,
+                status: 'requested'
+            }
+            
+            400
+            {
+                "message": "Cannot Follow yourself, {username}."
+            }
+            
+            400
+            {
+                "message": "Follow request already sent to {username}."
+            }
         '''
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -54,49 +83,116 @@ class FollowViewSet(GenericViewSet,
             
        
         follow_request, created = Follow.objects.get_or_create(follower=request.user, following_user=followee, status=Follow.REQUESTED)
+       
+        serializer = self.get_serializer(follow_request)
+        
+        
         if created:
-            return Response({"message": f"Follow request sent to {followee.username}"}, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response({"message": f"Follow request already sent to {followee.username}"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_204_NO_CONTENT: "Follow request deleted successfully",
-        }
-    )
+    
     def destroy(self, request, *args, **kwargs):
         '''
-        Delete Follow Request
+        팔로우 요청 삭제/취소
+        
+        ---
+        
+        ### id : 팔로우 요청의 id
+        
+        ## 예시 request:
+        
+            {
+                follower: 본인의 유저 ID
+                following_user: 팔로우할 유저의 ID
+            }
+            
+        ## 예시 response:
+        
+            204
+            {"message": "Follow request deleted"}
+            
         '''
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response({"message": "Follow request deleted"}, status=status.HTTP_204_NO_CONTENT)
 
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_200_OK: "Follow request accepted successfully",
-        }
-    )
+  
     def update(self, request, *args, **kwargs):
         '''
-        Accept Follow Request
+        팔로우 요청 허용
+        
+        ---
+        
+        ### id : 팔로우 요청의 id
+        
+        ## 예시 request:
+        
+            {
+                follower: 팔로우 요청한 유저ID
+                following_user: 요청받은 유저 ID
+            }
+            
+        ## 예시 response:
+        
+            200
+            {
+                id: 팔로우 요청의 ID,
+                follower: 팔로우를 요청한 사용자의 ID,
+                following_user: 팔로우를 요청받은 사용자의 ID,
+                status: 'accepted'
+            }
+            401 unauthorized
+            {
+                "detail": "이 토큰은 모든 타입의 토큰에 대해 유효하지 않습니다",
+                "code": "token_not_valid",
+                "messages": [
+                    {
+                    "token_class": "AccessToken",
+                    "token_type": "access",
+                    "message": "유효하지 않거나 만료된 토큰입니다"
+                    }
+                ]
+            }
         '''
+        
         instance = self.get_object()
         instance.status = Follow.ACCEPTED
         instance.save()
-        return Response({"message": "Follow request accepted"}, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(
-        responses={
-            status.HTTP_200_OK: "Follow request rejected successfully",
-        }
-    )
+    
     def partial_update(self, request, *args, **kwargs):
         '''
-        Reject Follow Request
+        팔로우 요청 거절
+        
+        ---
+        
+        ### id : 팔로우 요청의 id
+        
+        ## 예시 request:
+        
+            {
+                follower: 팔로우 요청한 유저ID
+                following_user: 요청받은 유저 ID
+            }
+            
+        ## 예시 response:
+        
+            200
+            {
+                "id": 9,
+                "status": "rejected",
+                "follower": 2,
+                "following_user": 1
+            }
+                        
         '''
         instance = self.get_object()
         instance.status = Follow.REJECTED
         instance.save()
-        return Response({"message": "Follow request rejected"}, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
        

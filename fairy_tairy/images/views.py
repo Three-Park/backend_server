@@ -49,7 +49,9 @@ class ImageViewSet(GenericViewSet,
                      mixins.DestroyModelMixin,
                      mixins.UpdateModelMixin):
     '''
-    Image CRUD
+    
+    ---
+    
     '''
     permission_classes = [IsAuthenticated]
     serializer_class = ImageSerializer
@@ -58,24 +60,44 @@ class ImageViewSet(GenericViewSet,
     def filter_queryset(self,queryset):
         queryset = queryset.filter(diary__user=self.request.user)
         return super().filter_queryset(queryset)
-    
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
-            },
-            required=['diary']
-        ),
-        responses={
-            201: ImageSerializer(),
-            400: "Bad Request",
-        },
-    )
+
+
     def create(self, request, *args, **kwargs):
+        
         '''
-        Generates an image based on diary content.
+        이미지 생성 
+        
+        ---
+        
+        ### 응답에 최대 40초 소요 가능 
+        ## 예시 request:
+        
+            {
+                'diary' : 2
+            }
+            
+        ## 예시 response:
+        
+            201
+            {
+                "id": 이미지의 ID,
+                "created_at": "생성 날짜",
+                "image_url": "s3에 저장된 이미지 url",
+                "image_prompt": "이미지 생성 프롬프트",
+                "diary": 2
+            }
+            401 unauthorized
+            400
+            {
+                'error': "Failed to get image from Flask"
+            }
+            
+            400
+            {
+                'error': "Error uploading image: {str(e)}"
+            }
         '''
+
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -98,24 +120,39 @@ class ImageViewSet(GenericViewSet,
         except Exception as e:
                 return Response({'error': f"Error uploading image: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
-            },
-            required=['diary']
-        ),
-        responses={
-            200: ImageSerializer(),
-            400: "Bad Request",
-            404: "Not Found",
-        },
-    )  
+
     def update(self, request, *args, **kwargs):
+        
         '''
-        Update Diary's image
+        이미지 생성 
+        
+        ---
+        
+        ### id : 이미지의 id
+        
+            
+        ## 예시 response:
+        
+            201
+            {
+                "id": 이미지의 ID,
+                "created_at": "생성 날짜",
+                "image_url": "s3에 저장된 이미지 url",
+                "image_prompt": "이미지 생성 프롬프트",
+                "diary": 일기의 ID
+            }
+            401 unauthorized
+            400
+            {
+                'error': "Failed to get image from Flask"
+            }
+            
+            400
+            {
+                'error': "Error uploading image: {str(e)}"
+            }
         '''
+
         try:
             partial = kwargs.pop('partial', True)
             instance = self.get_object()

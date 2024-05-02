@@ -23,12 +23,12 @@ class MusicViewSet(GenericViewSet,
     serializer_class = MusicSerializer
     queryset = Music.objects.all()
 
-    @swagger_auto_schema(
-        responses={200: MusicSerializer(many=True)}
-    )
+
     def list(self, request, *args, **kwargs):
         '''
-        내 Diary의 Music목록
+        내 Diary에 연결된 Music목록 (x)
+        
+        ---
         '''
         user_diaries = Diary.objects.filter(user=request.user)
         diary_ids = user_diaries.values_list('id', flat=True)
@@ -37,23 +37,17 @@ class MusicViewSet(GenericViewSet,
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(
-        responses={200: MusicSerializer(),
-                    400: "Bad Request",
-                    404: "Not Found",
-                    }
-    )
-    def retrieve(self, request, *args, **kwargs):
-        '''
-        특정 Music 객체 조회
-        '''
-        try:
-            instance = self.get_object()
-            serializer = self.get_serializer(instance)
-            return Response(serializer.data)
-        except Http404:
-            return Response({'error': 'Music not found'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': f"Error retrieve Music: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+    # def retrieve(self, request, *args, **kwargs):
+    #     '''
+    #     Music 조회
+    #     '''
+    #     try:
+    #         instance = self.get_object()
+    #         serializer = self.get_serializer(instance)
+    #         return Response(serializer.data)
+    #     except Http404:
+    #         return Response({'error': 'Music not found'}, status=status.HTTP_404_NOT_FOUND)
+    #     except Exception as e:
+    #         return Response({'error': f"Error retrieve Music: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
             

@@ -10,7 +10,3 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = '__all__'
 
-class FollowBodySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Follow
-        fields = 'following_user'

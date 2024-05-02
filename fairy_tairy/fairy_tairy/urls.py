@@ -27,7 +27,7 @@ from rest_framework import permissions
 from users.views import FollowViewSet
 from books.views import BookViewSet, PageViewSet
 from images.views import ImageViewSet
-from diaries.views import DiaryViewSet, DiaryAdminViewSet, DiaryMusicViewSet
+from diaries.views import DiaryViewSet, DiaryMusicViewSet
 from community.views import CommunityDiaryViewSet
 from emotion_chat.views import EmotionViewSet
 from recommend_music.views import MusicViewSet
@@ -36,7 +36,7 @@ schema_view = get_schema_view(
    openapi.Info(
       title="Snippets API",
       default_version='v1',
-      description="Test description",
+      description="Fairy-Tairy - API document",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="kateking001130@ewhain.net"),
       license=openapi.License(name="BSD License"),
@@ -53,7 +53,7 @@ router.register(r'books', BookViewSet, basename='books')
 router.register(r'pagies', PageViewSet, basename='pagies')
 router.register(r'diary', DiaryViewSet, basename='diary')
 router.register(r'diary_music', DiaryMusicViewSet, basename='diary_music')
-router.register(r'diary_admin', DiaryAdminViewSet, basename='diary_admin')
+# router.register(r'diary_admin', DiaryAdminViewSet, basename='diary_admin')
 router.register(r'emotion', EmotionViewSet, basename='emotion')
 router.register(r'image', ImageViewSet, basename='image')
 router.register(r'music',MusicViewSet,basename='music')

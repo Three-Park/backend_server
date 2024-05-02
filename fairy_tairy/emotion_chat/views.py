@@ -88,22 +88,29 @@ class EmotionViewSet(GenericViewSet,
         
         return super().filter_queryset(queryset)
     
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
-            },
-            required=['diary']
-        ),
-        responses={
-            201: EmotionSerializer(),
-            400: "Bad Request",
-        },
-    )
+
     def create(self, request, *args, **kwargs):
         """
-        일기 내용으로 emotion label과 응원 문구 생성, 저정
+        일기 내용으로 emotion label과 응원 문구 생성, 저장
+        
+        ---
+        ## 예시 request:
+        
+            {
+                'diary' : 2
+            }
+            
+        ## 예시 response:
+        
+            200
+            {
+                "id": 2,
+                "emotion_label": "불안",
+                "emotion_prompt": "",
+                "chat": " 이별은 사실일지도 모르겠어요 ",
+                "diary": 2
+            }
+            
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -123,22 +130,33 @@ class EmotionViewSet(GenericViewSet,
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
-            },
-            required=['diary']
-        ),
-        responses={
-            200: EmotionSerializer(),
-            400: "Bad Request",
-        },
-    )
+
     def update(self, request, *args, **kwargs):
         """
         일기 내용 변경된 경우 응원문구와 emotion label 업데이트
+        
+        ---
+        
+        ### id : emotoio의  ID
+        
+        
+        ## 예시 request:
+        
+            {
+                follower: 팔로우 요청한 유저ID
+                following_user: 요청받은 유저 ID
+            }
+            
+        ## 예시 response:
+        
+            200
+            {
+                id: 팔로우 요청의 ID,
+                follower: 팔로우를 요청한 사용자의 ID,
+                following_user: 팔로우를 요청받은 사용자의 ID,
+                status: 'rejected'
+            }
+            
         """
         partial = kwargs.pop('partial', False)
         instance = self.get_object()  # 기존 Emotion 객체 가져오기

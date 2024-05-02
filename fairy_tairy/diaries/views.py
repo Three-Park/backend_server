@@ -45,7 +45,21 @@ class DiaryViewSet(GenericViewSet,
                   mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin):
+    '''
+    일기 내용 관련 API
     
+    ---
+    ## serializer
+        id = 일기 id 
+        user = 사용자 id
+        
+        title = 제목 (max_length = 30)
+        content = 일기 내용
+        is_open = 이웃 오픈 여부(default=False)
+        
+        registered_at = (auto_now_add=True)
+        last_update_at = (auto_now=True)
+    '''
     permission_classes = [IsOwner]
 
     serializer_class = DiarySerializer
@@ -55,17 +69,6 @@ class DiaryViewSet(GenericViewSet,
         queryset = queryset.filter(user=self.request.user)
         return super().filter_queryset(queryset)
     
-    
-class DiaryAdminViewSet(GenericViewSet,
-                  mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
-                  mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.DestroyModelMixin):
-    
-    permission_classes = [IsAdminUser]
-    serializer_class = DiarySerializer
-    queryset = Diary.objects.all()
     
 
 class DiaryMusicViewSet(GenericViewSet,
@@ -77,58 +80,44 @@ class DiaryMusicViewSet(GenericViewSet,
     permission_classes = [IsOwner]
     serializer_class = DiaryMusicSerializer
     queryset = Diary.objects.all()
+    """일기 내용으로 음악 추천
     
+    """
     def filter_queryset(self,queryset):
         queryset = queryset.filter(user = self.request.user)
         return super().filter_queryset(queryset)
     
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'user': openapi.Schema(type=openapi.TYPE_INTEGER),
-                'content': openapi.Schema(type=openapi.TYPE_STRING),
-            },
-            required=['user','content']
-        ),
-        responses={
-            200: openapi.Response(description="OK", examples={
-                'application/json': {
-                    'most_similar_song': {
-                        'artist': 'Artist Name',
-                        'genre': 'Genre Name',
-                        'title': 'Song Title',
-                    },
-                    'similar_songs': [
-                        {
-                            'artist': 'Artist Name',
-                            'genre': 'Genre Name',
-                            'title': 'Song Title',
-                        },
-                        {
-                            'artist': 'Artist Name',
-                            'genre': 'Genre Name',
-                            'title': 'Song Title',
-                        },
-                        {
-                            'artist': 'Artist Name',
-                            'genre': 'Genre Name',
-                            'title': 'Song Title',
-                        },
-                        {
-                            'artist': 'Artist Name',
-                            'genre': 'Genre Name',
-                            'title': 'Song Title',
-                        },
-                    ]
-                }
-            }),
-            400: "Bad Request",
-        },
-    )
+    
     def update(self, request,*args, **kwargs):
         """
-        음악 추천 & best music저장/연결
+        음악 추천 & best music저장/연결하는 API
+        
+        ---
+        id = 일기 ID
+        ## 예시 request:
+        
+                {
+                    "user": 1,
+                    "content": "일기 내용 예시"
+                }
+                
+        ## 예시 response:
+                200
+                {
+                    "id": 1,
+                    "user": 1,
+                    "content": "일기 내용",
+                    "music": {
+                        "id": 1,
+                        "music_title": "Best Music Title",
+                        "artist": "Best Artist",
+                        "genre": "Best Genre"
+                    }
+                }
+                401 
+                400
+                {'detail': 'Failed to get similar music from Flask'}
+        
         """
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
@@ -148,26 +137,56 @@ class DiaryMusicViewSet(GenericViewSet,
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
             
-            return Response({'most_similar_song': best_music, 'similar_songs': similar_songs}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Failed to get similar music from Flask'}, status=status.HTTP_400_BAD_REQUEST)
     
-    @swagger_auto_schema(
-        responses={
-            200: "OK",
-            400: "Bad Request",
-        },
-    )
+    @swagger_auto_schema(manual_parameters=[
+            openapi.Parameter('id', openapi.IN_PATH, description="일기의 ID", type=openapi.TYPE_INTEGER)],
+                         responses={
+            200: openapi.Response(description="일기에서 음악 연결 삭제",schema=DiaryMusicSerializer),
+            400: "No music to disconnect",
+        },)
     def destroy(self, request,*args, **kwargs):
         """
         현재 일기의 음악 연결 삭제
+        
+        ---
+        ## 예시
+            
+            response: 200
+            {
+                "id": 1,
+                "user": 1,
+                "content": "일기 내용",
+                "music": null
+            }
+            
+            response: 400
+            {'detail': 'No music to disconnect'}
+
         """
         partial = kwargs.pop('partial', True)
         instance = self.get_object()
         if instance.music:
             instance.music = None
             instance.save()
-
-            return Response({'detail': 'Music disconnected'}, status=status.HTTP_200_OK)
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'No music to disconnect'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class DiaryAdminViewSet(GenericViewSet,
+#                   mixins.ListModelMixin,
+#                   mixins.CreateModelMixin,
+#                   mixins.RetrieveModelMixin,
+#                   mixins.UpdateModelMixin,
+#                   mixins.DestroyModelMixin):
+    
+#     permission_classes = [IsAdminUser]
+#     serializer_class = DiarySerializer
+#     queryset = Diary.objects.all()
+    

@@ -21,31 +21,39 @@ class BookViewSet(GenericViewSet,
                   mixins.RetrieveModelMixin,
                   mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin):
-    
+    """
+        book API
+        
+        ---
+        # Model
+            - user = 사용자 id (fk)
+            - book_title = 책의 제목 (max_length = 30)
+            - author = 작성자 - 사용자가 직접 입력(max_length = 30)
+            - description = 책에대한 사용자의 description. TextField
+            - created_at=(auto_now_add)
+            - is_open = 공개여부 - 사용자가 공개여부 설정(default=False)
+
+        """
     permission_classes = [IsFollowerOrOwner]
 
     serializer_class = BookSerializer
     queryset = Book.objects.all()
-    @swagger_auto_schema(
-        responses={
-            200: BookSerializer(many=True),
-        },
-    )
+
     def list(self, request, *args, **kwargs):
         """
-        List books.
+        book의 list를 불러오는 API
+        
+        ---
+        
         """
         return super().list(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        responses={
-            200: BookSerializer(),
-            404: "Not Found",
-        },
-    )
     def retrieve(self, request, *args, **kwargs):
         """
-        Retrieve a book by ID.
+        book의 id를 통해 읽음
+        
+        ---
+        
         """
         return super().retrieve(request, *args, **kwargs)
 
@@ -67,58 +75,45 @@ class PageViewSet(GenericViewSet,
         queryset = queryset.filter(diary__user=self.request.user)
         return super().filter_queryset(queryset)
     
-    @swagger_auto_schema(
-        responses={
-            200: "OK",
-            404: "Not Found",
-        },
-    )
+
     def destroy(self, request, *args, **kwargs):
         """
-        delete book
+        책과 일기 사이의 연결 끊음
+        
+        ---
         """
         instance = self.get_object()
         instance.delete()  
         return Response(status=status.HTTP_200_OK)
     
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
-                'book': openapi.Schema(type=openapi.TYPE_INTEGER, description="Book ID"),
-            },
-            required=['diary', 'book']
-        ),
-        responses={
-            200: PageSerializer(),
-            400: "Bad Request",
-        },
-    )
     def retrieve(self, request, *args, **kwargs):
         """
-        Retrieve a page by ID.
+        페이지 조회
+        
+        ---
         """
         return super().retrieve(request, *args, **kwargs)
 
 
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
-                'book': openapi.Schema(type=openapi.TYPE_INTEGER, description="Book ID"),
-            },
-            required=['diary', 'book']
-        ),
-        responses={
-            200: PageSerializer(),
-            400: "Bad Request",
-        },
-    )
+    # @swagger_auto_schema(
+    #     request_body=openapi.Schema(
+    #         type=openapi.TYPE_OBJECT,
+    #         properties={
+    #             'diary': openapi.Schema(type=openapi.TYPE_INTEGER, description="Diary ID"),
+    #             'book': openapi.Schema(type=openapi.TYPE_INTEGER, description="Book ID"),
+    #         },
+    #         required=['diary', 'book']
+    #     ),
+    #     responses={
+    #         200: PageSerializer(),
+    #         400: "Bad Request",
+    #     },
+    # )
     def create(self, request, pk=None):
         """
-        Connect a diary to a page within a book.
+        일기를 책과 연결함
+        
+        ---
         """
         page = self.get_object()
         diary_id = request.data.get('diary')

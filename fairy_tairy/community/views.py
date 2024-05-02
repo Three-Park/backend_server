@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from django.contrib.auth.models import AnonymousUser
 
 from diaries.models import *
 from books.models import *
@@ -28,6 +29,8 @@ class CommunityDiaryViewSet(GenericViewSet,
         나와 친구의 diary에서 is_open=true인 경우만 보이도록 필터링
         """
         user = self.request.user
+        if isinstance(user, AnonymousUser):
+            return Diary.objects.none()
         followed_users_1 = Follow.objects.filter(follower=user, status='accepted').values_list('following_user', flat=True)
         followed_users_2 = Follow.objects.filter(following_user=user, status='accepted').values_list('follower', flat=True)
         
@@ -35,31 +38,16 @@ class CommunityDiaryViewSet(GenericViewSet,
                                     Q(user__in=followed_users_1, is_open=True) | 
                                     Q(user__in=followed_users_2, is_open=True))
         
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('user', openapi.IN_QUERY, description="Filter diaries by user ID", type=openapi.TYPE_INTEGER),
-            openapi.Parameter('is_open', openapi.IN_QUERY, description="Filter diaries by openness", type=openapi.TYPE_BOOLEAN),
-        ],
-        responses={
-            200: CommunityDiarySerializer(many=True),
-            404: "Not Found",
-        },
-    )
+
     def list(self, request, *args, **kwargs):
         """
-        List community diaries filtered by user ID and openness.
+        이웃들의 일기목록을 보여줌
         """
         return super().list(request, *args, **kwargs)
 
 
-    @swagger_auto_schema(
-        responses={
-            200: CommunityDiarySerializer(),
-            404: "Not Found",
-        },
-    )
     def retrieve(self, request, *args, **kwargs):
         """
-        Retrieve a community diary by ID.
+        이웃의 일기를 조회
         """
         return super().retrieve(request, *args, **kwargs)
