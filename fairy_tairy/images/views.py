@@ -65,7 +65,7 @@ class ImageViewSet(GenericViewSet,
     def create(self, request, *args, **kwargs):
         
         '''
-        이미지 생성 
+        이미지 생성 API
         
         ---
         
@@ -73,35 +73,29 @@ class ImageViewSet(GenericViewSet,
         ## 예시 request:
         
             {
-                'diary' : 2
+                'diary' : 1
             }
             
         ## 예시 response:
         
             201
             {
-                "id": 이미지의 ID,
-                "created_at": "생성 날짜",
-                "image_url": "s3에 저장된 이미지 url",
-                "image_prompt": "이미지 생성 프롬프트",
-                "diary": 2
+                  "id": 70,
+                    "created_at": "2024-05-02T13:04:10.208658+09:00",
+                    "image_url": "https://버킷주소/images/826cb58e-46a3-41fc-9699-bc2eccdc1355.jpg",
+                    "image_prompt": "(masterpiece,detailed), (Oil Painting:1.3), (Impressionism:1.3) ,(oil painting with brush strokes:1.2), (looking away:1.1), a girl in a traditional Korean hanbok, cherry blossom background, soft pastel colors, Korean artist reference, (ethereal:1.2), (delicate details:1.3), (dreamy atmosphere:1.25)",
+                    "diary": 1
             }
             400
             {
-                'error': "Failed to get image from Flask"
+                'error': "Failed to get image from Flask" 이 경우 AI 서버가 꺼져있을때임
             }
             400
             {
                 'error': "Error uploading image: {str(e)}"
             }
             401 unauthorized
-            {
-                "detail": "자격 인증데이터(authentication credentials)가 제공되지 않았습니다."
-            }
-            403
-            {
-                "detail": "CSRF Failed: CSRF token missing."
-            }
+            403 CSRF token missing
         '''
 
         try:
@@ -130,13 +124,14 @@ class ImageViewSet(GenericViewSet,
     def update(self, request, *args, **kwargs):
         
         '''
-        이미지 생성 
+        이미지 업데이트(재생성) API
         
         ---
+         
+        ### 응답에 최대 40초 소요 가능 
         
         ### id : 이미지의 id
-        
-            
+
         ## 예시 response:
         
             201
@@ -150,12 +145,11 @@ class ImageViewSet(GenericViewSet,
             401 unauthorized
             400
             {
-                'error': "Failed to get image from Flask"
+                'error': "Failed to get image from Flask" 이 경우 AI 서버가 꺼져있을때임
             }
-            
             400
             {
-                'error': "Error uploading image: {str(e)}"
+                'error': "Error uploading image: {str(e)}" 
             }
         '''
 
@@ -182,3 +176,72 @@ class ImageViewSet(GenericViewSet,
             return Response({'error': "Image not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': f"Error updating image: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+    def retrieve(self, request, *args, **kwargs):
+        '''
+        이미지 ID로 이미지를 조회하는 API
+        
+        ---
+        
+        ## 예시 response
+            201
+                {
+                    "id": 70,
+                        "created_at": "2024-05-02T13:04:10.208658+09:00",
+                        "image_url": "https://버킷주소/images/826cb58e-46a3-41fc-9699-bc2eccdc1355.jpg",
+                        "image_prompt": "(masterpiece,detailed), (Oil Painting:1.3), (Impressionism:1.3) ,(oil painting with brush strokes:1.2), (looking away:1.1), a girl in a traditional Korean hanbok, cherry blossom background, soft pastel colors, Korean artist reference, (ethereal:1.2), (delicate details:1.3), (dreamy atmosphere:1.25)",
+                        "diary": 1
+                }
+            
+        '''
+        return super().retrieve(request, *args, **kwargs)
+    
+    def partial_update(self, request, *args, **kwargs):
+        '''
+        이미지 업데이트(재생성) API (==update)
+        
+        ---
+         
+        ### 응답에 최대 40초 소요 가능 
+        
+        ### id : 이미지의 id
+
+        ## 예시 response:
+        
+            201
+            {
+                "id": 이미지의 ID,
+                "created_at": "생성 날짜",
+                "image_url": "s3에 저장된 이미지 url",
+                "image_prompt": "이미지 생성 프롬프트",
+                "diary": 일기의 ID
+            }
+            401 unauthorized
+            400
+            {
+                'error': "Failed to get image from Flask"
+            }
+            400
+            {
+                'error': "Error uploading image: {str(e)}"
+            }
+        '''
+        return super().partial_update(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        '''
+        이미지를 삭제하는 API
+        
+        ---
+        '''
+        return super().destroy(request, *args, **kwargs)
+    
+    def list(self, request, *args, **kwargs):
+        '''
+        이미지 목록을 조회하는 API
+        
+        ---
+        
+        '''
+        return super().list(request, *args, **kwargs)

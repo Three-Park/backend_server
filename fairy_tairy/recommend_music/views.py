@@ -15,18 +15,18 @@ from fairy_tairy.permissions import *
 
 
 class MusicViewSet(GenericViewSet,
-                     mixins.CreateModelMixin,
                      mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin,
                      mixins.DestroyModelMixin):
     
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwner]
     serializer_class = MusicSerializer
     queryset = Music.objects.all()
 
 
     def list(self, request, *args, **kwargs):
         '''
-        내 Diary에 연결된 Music목록 (x)
+        내 Diary에 연결된 Music목록 조회
         
         ---
         '''
@@ -36,18 +36,19 @@ class MusicViewSet(GenericViewSet,
         
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    def retrieve(self, request, *args, **kwargs):
+        '''
+        Music Data 조회 API
+        
+        ---
+        '''
+        return super().retrieve(request, *args, **kwargs)
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     '''
-    #     Music 조회
-    #     '''
-    #     try:
-    #         instance = self.get_object()
-    #         serializer = self.get_serializer(instance)
-    #         return Response(serializer.data)
-    #     except Http404:
-    #         return Response({'error': 'Music not found'}, status=status.HTTP_404_NOT_FOUND)
-    #     except Exception as e:
-    #         return Response({'error': f"Error retrieve Music: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-
-            
+    def destroy(self, request, *args, **kwargs):
+        '''
+        Music Data 삭제 API
+        
+        ---
+        '''
+        return super().destroy(request, *args, **kwargs)

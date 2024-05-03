@@ -173,7 +173,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
     'http://localhost:3000',
     'http://localhost:8081', 
-    'http://43.202.125.125:8000'# 클라이언트의 주소로 변경해야 합니다.
+    'http://43.202.125.125:8000',# 클라이언트의 주소로 변경해야 합니다.
+    'http://*'
 ]
 CORS_ALLOW_HEADERS = [
     'accept',

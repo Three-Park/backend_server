@@ -76,7 +76,6 @@ def request_comment(content):
 class EmotionViewSet(GenericViewSet,
                   mixins.ListModelMixin,
                   mixins.CreateModelMixin,
-                  mixins.UpdateModelMixin,
                   mixins.DestroyModelMixin):
     
     permission_classes = [IsAuthenticated]
@@ -88,10 +87,31 @@ class EmotionViewSet(GenericViewSet,
         
         return super().filter_queryset(queryset)
     
+    
+    def list(self, request, *args, **kwargs):
+        """
+        emmtion_list 내가 작성한 일기의 감정라벨, 응원문구 목록 조회 API
+        
+        ---
+        
+        """
+        return super().list(request, *args, **kwargs)
+    
+    
+    def destroy(self, request, *args, **kwargs):
+        """
+        emotion_delete 감정라벨, 응원문구 삭제하는 API
+        
+        ---
+        
+        """
+        return super().destroy(request, *args, **kwargs)
+    
+    
 
     def create(self, request, *args, **kwargs):
         """
-        일기 내용으로 emotion label과 응원 문구 생성, 저장
+        emotion_create 일기 내용으로 감정라벨, 응원문구 생성 하는 API
         
         ---
         ## 예시 request:
@@ -114,7 +134,6 @@ class EmotionViewSet(GenericViewSet,
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-    
         diary = serializer.validated_data.get('diary')
 
         if diary.user != request.user:
@@ -123,50 +142,67 @@ class EmotionViewSet(GenericViewSet,
         chat = request_comment(diary.content)
         label = request_emotion(diary.content)
         
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(diary=diary, chat=chat, emotion_label = label)
+        existing_emotion = Emotion.objects.filter(diary=diary).first()
+        if existing_emotion:
+            serializer = self.get_serializer(existing_emotion, data={'chat': chat, 'emotion_label': label}, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(diary=diary, chat=chat, emotion_label = label)
+            
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(diary=diary, chat=chat, emotion_label = label)
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     
 
-    def update(self, request, *args, **kwargs):
-        """
-        일기 내용 변경된 경우 응원문구와 emotion label 업데이트
+    # def update(self, request, *args, **kwargs):
+    #     """
+    #     emotion_update 일기 내용으로 감정라벨, 응원문구 업데이트 하는 API
         
-        ---
+    #     ---
         
-        ### id : emotoio의  ID
+    #     ### id : emotoio의  ID
         
         
-        ## 예시 request:
+    #     ## 예시 request:
         
-            {
-                follower: 팔로우 요청한 유저ID
-                following_user: 요청받은 유저 ID
-            }
+    #         {
+    #             'diary' : 2
+    #         }
             
-        ## 예시 response:
+    #     ## 예시 response:
         
-            200
-            {
-                id: 팔로우 요청의 ID,
-                follower: 팔로우를 요청한 사용자의 ID,
-                following_user: 팔로우를 요청받은 사용자의 ID,
-                status: 'rejected'
-            }
+    #         200
+    #         {
+    #             "id": 2,
+    #             "emotion_label": "불안",
+    #             "emotion_prompt": "",
+    #             "chat": " 이별은 사실일지도 모르겠어요 ",
+    #             "diary": 2
+    #         }
             
-        """
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()  # 기존 Emotion 객체 가져오기
-        diary = get_object_or_404(Diary, id=instance.diary.id, user=request.user)
+    #     """
+    #     instance = self.get_object()  # 기존 Emotion 객체 가져오기
+    #     diary = get_object_or_404(Diary, id=instance.diary.id, user=request.user)
         
-        chat = request_comment(diary.content)
-        label = request_emotion(diary.content)
+    #     chat = request_comment(diary.content)
+    #     label = request_emotion(diary.content)
         
-        serializer = self.get_serializer(instance, data=request.data,chat=chat, emotion_label = label)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+    #     serializer = self.get_serializer(instance, data=request.data,chat=chat, emotion_label = label)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_update(serializer)
        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    # def partial_update(self, request, *args, **kwargs):
+    #     """
+    #     emotion_partial_update 일기 내용으로 감정라벨, 응원문구 업데이트 하는 API
+        
+    #     ---
+        
+    #     """
+    #     return super().partial_update(request, *args, **kwargs)
+    

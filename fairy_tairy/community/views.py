@@ -41,13 +41,17 @@ class CommunityDiaryViewSet(GenericViewSet,
 
     def list(self, request, *args, **kwargs):
         """
-        이웃들의 일기목록을 보여줌
+        나와 이웃들의 공개된 일기목록 조회 API
+        
+        ---
         """
         return super().list(request, *args, **kwargs)
 
 
     def retrieve(self, request, *args, **kwargs):
         """
-        이웃의 일기를 조회
+        이웃의 일기를 조회하는 API
+        
+        ---
         """
         return super().retrieve(request, *args, **kwargs)
