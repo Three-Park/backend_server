@@ -202,14 +202,17 @@ class PageViewSet(GenericViewSet,
         # 연결할 일기와 책의 정보를 가져옴
         diary_id = request.data.get('diary')
         book_id = request.data.get('book')
+        user = request.user
+        
         diary = get_object_or_404(Diary, id=diary_id, user=request.user)
         book = get_object_or_404(Book, id=book_id, user=request.user)
         
-        page = serializer.instance
-        last_page = Page.objects.filter(book=book).order_by('-order').first().order
-        page.diary = diary
-        page.book = book
-        page.order = last_page+1
-        page.save()
+        page = serializer.save(diary=diary, book=book, user=user)
+        # page = serializer.instance
+        # last_page = Page.objects.filter(book=book).order_by('-order').first().order
+        # page.diary = diary
+        # page.book = book
+        # # page.order = last_page+1
+        # page.save()
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)

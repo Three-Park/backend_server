@@ -41,21 +41,3 @@ class Page(models.Model):
                 self.order = 1
         super(Page, self).save(*args, **kwargs)
         
-@receiver(pre_save, sender=Page)
-def set_page_order(sender, instance, **kwargs):
-    if not instance.order:
-        # 새 페이지에 대한 순서를 설정합니다.
-        last_page = Page.objects.filter(book=instance.book).order_by('-order').first()
-        print('ordering...')
-        if last_page:
-            instance.order = last_page.order + 1
-        else:
-            instance.order = 1
-            
-@receiver(post_delete, sender=Page)
-def update_page_order(sender, instance, **kwargs):
-    # 페이지를 삭제한 후에는 순서를 업데이트합니다.
-    pages_to_update = Page.objects.filter(book=instance.book, order__gt=instance.order)
-    for page in pages_to_update:
-        page.order -= 1
-        page.save()
