@@ -12,17 +12,11 @@
         },
         "version": "v1"
     },
-    "host": "127.0.0.1:8000",
-    "schemes": [
-        "http"
-    ],
+    "host": "43.202.125.125:8000",
+    "schemes": ["http"],
     "basePath": "/",
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
     "securityDefinitions": {
         "BearerAuth": {
             "type": "apiKey",
@@ -54,9 +48,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "post": {
                 "operationId": "books_create",
@@ -80,9 +72,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "parameters": []
         },
@@ -100,9 +90,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "put": {
                 "operationId": "books_update",
@@ -126,9 +114,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "patch": {
                 "operationId": "books_partial_update",
@@ -152,9 +138,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "delete": {
                 "operationId": "books_delete",
@@ -165,9 +149,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "parameters": [
                 {
@@ -204,9 +186,7 @@
                         "description": "연결된 일기가 없습니다."
                     }
                 },
-                "tags": [
-                    "books"
-                ]
+                "tags": ["books"]
             },
             "parameters": [
                 {
@@ -235,9 +215,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "community"
-                ]
+                "tags": ["community"]
             },
             "parameters": []
         },
@@ -255,9 +233,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "community"
-                ]
+                "tags": ["community"]
             },
             "parameters": [
                 {
@@ -286,14 +262,12 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "post": {
                 "operationId": "diary_create",
                 "summary": "diary_create 오늘의 일기를 작성하는 API",
-                "description": "---\n## 예시 request:\n\n        {\n            \"user\": 1,\n            \"title\": \"일기 제목\",\n            \"content\": \"일기 내용\",\n            \"is_open\": true\n        }\n\n## 예시 response:\n        201\n        {\n            \"id\": 1,\n            \"user\": 1,\n            \"title\": \"일기 제목\",\n            \"content\": \"일기 내용\",\n            \"is_open\": true,\n            \"registered_at\": \"2024-05-03T10:00:00Z\",\n            \"last_update_at\": \"2024-05-03T10:00:00Z\"\n        }\n        400\n        {'detail':  '오늘은 이미 일기를 작성했습니다.'}",
+                "description": "---\n## 예시 request:\n\n        {\n            \"user\": 1,\n            \"title\": \"일기 제목\",\n            \"content\": \"일기 내용\",\n            \"is_open\": true\n        }\n\n## 예시 response:\n        201\n        {\n            \"id\": 1,\n            \"user\": 1,\n            \"title\": \"일기 제목\",\n            \"content\": \"일기 내용\",\n            \"is_open\": true,\n            \"registered_at\": \"2024-05-03T10:00:00Z\",\n            \"last_update_at\": \"2024-05-03T10:00:00Z\",\n            \"music\": null,\n            \"image_set\": [],\n            \"emotion_set\": [],\n        }\n        400\n        {'detail':  '오늘은 이미 일기를 작성했습니다.'}",
                 "parameters": [
                     {
                         "name": "data",
@@ -312,9 +286,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "parameters": []
         },
@@ -343,9 +315,7 @@
                         "description": "해당 날짜에 일기가 없습니다."
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "parameters": []
         },
@@ -363,9 +333,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "put": {
                 "operationId": "diary_update",
@@ -389,9 +357,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "patch": {
                 "operationId": "diary_partial_update",
@@ -415,9 +381,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "delete": {
                 "operationId": "diary_delete",
@@ -429,9 +393,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "parameters": [
                 {
@@ -460,9 +422,7 @@
                         "description": "해당 일기에 대한 감정 결과가 없습니다."
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "parameters": [
                 {
@@ -491,9 +451,7 @@
                         "description": "해당 일기에 대한 이미지가 없습니다."
                     }
                 },
-                "tags": [
-                    "diary"
-                ]
+                "tags": ["diary"]
             },
             "parameters": [
                 {
@@ -522,9 +480,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary_music"
-                ]
+                "tags": ["diary_music"]
             },
             "parameters": []
         },
@@ -542,9 +498,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary_music"
-                ]
+                "tags": ["diary_music"]
             },
             "put": {
                 "operationId": "diary_music_update",
@@ -568,9 +522,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary_music"
-                ]
+                "tags": ["diary_music"]
             },
             "patch": {
                 "operationId": "diary_music_partial_update",
@@ -594,9 +546,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "diary_music"
-                ]
+                "tags": ["diary_music"]
             },
             "delete": {
                 "operationId": "diary_music_delete",
@@ -622,9 +572,7 @@
                         "description": "No music to disconnect"
                     }
                 },
-                "tags": [
-                    "diary_music"
-                ]
+                "tags": ["diary_music"]
             },
             "parameters": [
                 {
@@ -639,7 +587,7 @@
         "/dj-rest-auth/login/": {
             "post": {
                 "operationId": "dj-rest-auth_login_create",
-                "description": "Check the credentials and return the REST Token\nif the credentials are valid and authenticated.\nCalls Django Auth login method to register User ID\nin Django session framework\n\nAccept the following POST parameters: username, password\nReturn the REST Framework Token Object's key.\n---\n## 예시 request\n\t\t{\n\t\t\t\"username\":\"threepark\"\n\t\t\t\"password\":\"threepark\"\n\t\t}\n## 예시 response\n\t\t\t{\n\t\t\t\t\"access\": \"엑세스 토큰\",\n\t\t\t\t\"refresh\": \"리프레시 토큰\",\n\t\t\t\t\"user\":{\n\t\t\t\t\t\"pk\": 1,\n\t\t\t\t\t\"username\":\"threepark\",\n\t\t\t\t\t\"email\": \"threepark@threepark.com\",\n\t\t\t\t\t\"first_name\": \"\",\n\t\t\t\t\t\"last_name\": \"\"  \n\t\t\t\t\t}\n\t\t\t}",
+                "description": "Check the credentials and return the REST Token\nif the credentials are valid and authenticated.\nCalls Django Auth login method to register User ID\nin Django session framework\n\nAccept the following POST parameters: username, password\nReturn the REST Framework Token Object's key.",
                 "parameters": [
                     {
                         "name": "data",
@@ -658,9 +606,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -675,9 +621,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "post": {
                 "operationId": "dj-rest-auth_logout_create",
@@ -689,9 +633,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -718,9 +660,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -747,9 +687,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -776,9 +714,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -804,9 +740,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -832,9 +766,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -860,9 +792,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -888,9 +818,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -916,9 +844,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -936,9 +862,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "put": {
                 "operationId": "dj-rest-auth_user_update",
@@ -962,9 +886,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "patch": {
                 "operationId": "dj-rest-auth_user_partial_update",
@@ -988,9 +910,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "dj-rest-auth"
-                ]
+                "tags": ["dj-rest-auth"]
             },
             "parameters": []
         },
@@ -1011,9 +931,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "emotion"
-                ]
+                "tags": ["emotion"]
             },
             "post": {
                 "operationId": "emotion_create",
@@ -1037,9 +955,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "emotion"
-                ]
+                "tags": ["emotion"]
             },
             "parameters": []
         },
@@ -1054,9 +970,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "emotion"
-                ]
+                "tags": ["emotion"]
             },
             "parameters": [
                 {
@@ -1084,9 +998,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "follow"
-                ]
+                "tags": ["follow"]
             },
             "post": {
                 "operationId": "follow_create",
@@ -1122,9 +1034,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "follow"
-                ]
+                "tags": ["follow"]
             },
             "parameters": []
         },
@@ -1141,9 +1051,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "follow"
-                ]
+                "tags": ["follow"]
             },
             "put": {
                 "operationId": "follow_update",
@@ -1169,9 +1077,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "follow"
-                ]
+                "tags": ["follow"]
             },
             "patch": {
                 "operationId": "follow_partial_update",
@@ -1197,9 +1103,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "follow"
-                ]
+                "tags": ["follow"]
             },
             "delete": {
                 "operationId": "follow_delete",
@@ -1211,9 +1115,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "follow"
-                ]
+                "tags": ["follow"]
             },
             "parameters": [
                 {
@@ -1242,9 +1144,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "image"
-                ]
+                "tags": ["image"]
             },
             "post": {
                 "operationId": "image_create",
@@ -1268,9 +1168,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "image"
-                ]
+                "tags": ["image"]
             },
             "parameters": []
         },
@@ -1288,9 +1186,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "image"
-                ]
+                "tags": ["image"]
             },
             "put": {
                 "operationId": "image_update",
@@ -1314,9 +1210,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "image"
-                ]
+                "tags": ["image"]
             },
             "patch": {
                 "operationId": "image_partial_update",
@@ -1340,9 +1234,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "image"
-                ]
+                "tags": ["image"]
             },
             "delete": {
                 "operationId": "image_delete",
@@ -1354,9 +1246,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "image"
-                ]
+                "tags": ["image"]
             },
             "parameters": [
                 {
@@ -1385,9 +1275,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "music"
-                ]
+                "tags": ["music"]
             },
             "parameters": []
         },
@@ -1405,9 +1293,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "music"
-                ]
+                "tags": ["music"]
             },
             "delete": {
                 "operationId": "music_delete",
@@ -1419,9 +1305,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "music"
-                ]
+                "tags": ["music"]
             },
             "parameters": [
                 {
@@ -1449,9 +1333,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "pagies"
-                ]
+                "tags": ["pagies"]
             },
             "post": {
                 "operationId": "pagies_create",
@@ -1475,9 +1357,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "pagies"
-                ]
+                "tags": ["pagies"]
             },
             "parameters": []
         },
@@ -1495,9 +1375,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "pagies"
-                ]
+                "tags": ["pagies"]
             },
             "put": {
                 "operationId": "pagies_update",
@@ -1520,9 +1398,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "pagies"
-                ]
+                "tags": ["pagies"]
             },
             "patch": {
                 "operationId": "pagies_partial_update",
@@ -1545,9 +1421,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "pagies"
-                ]
+                "tags": ["pagies"]
             },
             "delete": {
                 "operationId": "pagies_delete",
@@ -1559,9 +1433,7 @@
                         "description": ""
                     }
                 },
-                "tags": [
-                    "pagies"
-                ]
+                "tags": ["pagies"]
             },
             "parameters": [
                 {
@@ -1576,12 +1448,7 @@
     },
     "definitions": {
         "Book": {
-            "required": [
-                "book_title",
-                "author",
-                "description",
-                "user"
-            ],
+            "required": ["book_title", "author", "description", "user"],
             "type": "object",
             "properties": {
                 "id": {
@@ -1622,11 +1489,7 @@
                 }
             }
         },
-        "Diary": {
-            "required": [
-                "user",
-                "title"
-            ],
+        "Music": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1634,111 +1497,31 @@
                     "type": "integer",
                     "readOnly": true
                 },
-                "user": {
-                    "title": "User",
-                    "type": "integer"
-                },
-                "title": {
-                    "title": "Title",
+                "music_title": {
+                    "title": "Music title",
                     "type": "string",
-                    "maxLength": 30,
-                    "minLength": 1
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "x-nullable": true
                 },
-                "content": {
-                    "title": "Content",
-                    "type": "string"
-                },
-                "registered_at": {
-                    "title": "Registered at",
+                "artist": {
+                    "title": "Artist",
                     "type": "string",
-                    "format": "date-time",
-                    "readOnly": true
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "x-nullable": true
                 },
-                "last_update_at": {
-                    "title": "Last update at",
+                "genre": {
+                    "title": "Genre",
                     "type": "string",
-                    "format": "date-time",
-                    "readOnly": true
-                },
-                "is_open": {
-                    "title": "Is open",
-                    "type": "boolean"
-                }
-            }
-        },
-        "CommunityDiary": {
-            "required": [
-                "user",
-                "title"
-            ],
-            "type": "object",
-            "properties": {
-                "user": {
-                    "title": "User",
-                    "type": "integer"
-                },
-                "title": {
-                    "title": "Title",
-                    "type": "string",
-                    "maxLength": 30,
-                    "minLength": 1
-                },
-                "content": {
-                    "title": "Content",
-                    "type": "string"
-                },
-                "registered_at": {
-                    "title": "Registered at",
-                    "type": "string",
-                    "format": "date-time",
-                    "readOnly": true
-                },
-                "last_update_at": {
-                    "title": "Last update at",
-                    "type": "string",
-                    "format": "date-time",
-                    "readOnly": true
-                },
-                "is_open": {
-                    "title": "Is open",
-                    "type": "boolean"
-                }
-            }
-        },
-        "Emotion": {
-            "required": [
-                "diary"
-            ],
-            "type": "object",
-            "properties": {
-                "id": {
-                    "title": "ID",
-                    "type": "integer",
-                    "readOnly": true
-                },
-                "emotion_label": {
-                    "title": "Emotion label",
-                    "type": "string",
-                    "maxLength": 10
-                },
-                "emotion_prompt": {
-                    "title": "Emotion prompt",
-                    "type": "string"
-                },
-                "chat": {
-                    "title": "Chat",
-                    "type": "string"
-                },
-                "diary": {
-                    "title": "Diary",
-                    "type": "integer"
+                    "maxLength": 20,
+                    "minLength": 1,
+                    "x-nullable": true
                 }
             }
         },
         "Image": {
-            "required": [
-                "diary"
-            ],
+            "required": ["diary"],
             "type": "object",
             "properties": {
                 "id": {
@@ -1772,7 +1555,8 @@
                 }
             }
         },
-        "Music": {
+        "Emotion": {
+            "required": ["diary"],
             "type": "object",
             "properties": {
                 "id": {
@@ -1780,33 +1564,154 @@
                     "type": "integer",
                     "readOnly": true
                 },
-                "music_title": {
-                    "title": "Music title",
+                "emotion_label": {
+                    "title": "Emotion label",
                     "type": "string",
-                    "maxLength": 100,
-                    "minLength": 1,
-                    "x-nullable": true
+                    "maxLength": 10
                 },
-                "artist": {
-                    "title": "Artist",
-                    "type": "string",
-                    "maxLength": 100,
-                    "minLength": 1,
-                    "x-nullable": true
+                "emotion_prompt": {
+                    "title": "Emotion prompt",
+                    "type": "string"
                 },
-                "genre": {
-                    "title": "Genre",
+                "chat": {
+                    "title": "Chat",
+                    "type": "string"
+                },
+                "diary": {
+                    "title": "Diary",
+                    "type": "integer"
+                }
+            }
+        },
+        "Diary": {
+            "required": ["user", "title"],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "user": {
+                    "title": "User",
+                    "type": "integer"
+                },
+                "title": {
+                    "title": "Title",
                     "type": "string",
-                    "maxLength": 20,
-                    "minLength": 1,
-                    "x-nullable": true
+                    "maxLength": 30,
+                    "minLength": 1
+                },
+                "content": {
+                    "title": "Content",
+                    "type": "string"
+                },
+                "registered_at": {
+                    "title": "Registered at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "last_update_at": {
+                    "title": "Last update at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "music": {
+                    "$ref": "#/definitions/Music"
+                },
+                "is_open": {
+                    "title": "Is open",
+                    "type": "boolean"
+                },
+                "image_set": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "readOnly": true
+                },
+                "emotion_set": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Emotion"
+                    },
+                    "readOnly": true
+                }
+            }
+        },
+        "User": {
+            "required": ["username"],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "username": {
+                    "title": "사용자 이름",
+                    "description": "150자 이하 문자, 숫자 그리고 @/./+/-/_만 가능합니다.",
+                    "type": "string",
+                    "pattern": "^[\\w.@+-]+$",
+                    "maxLength": 150,
+                    "minLength": 1
+                }
+            }
+        },
+        "CommunityDiary": {
+            "required": ["title"],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "user": {
+                    "$ref": "#/definitions/User"
+                },
+                "title": {
+                    "title": "Title",
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 1
+                },
+                "content": {
+                    "title": "Content",
+                    "type": "string"
+                },
+                "music": {
+                    "$ref": "#/definitions/Music"
+                },
+                "image_set": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Image"
+                    },
+                    "readOnly": true
+                },
+                "registered_at": {
+                    "title": "Registered at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "last_update_at": {
+                    "title": "Last update at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "is_open": {
+                    "title": "Is open",
+                    "type": "boolean"
                 }
             }
         },
         "DiaryMusic": {
-            "required": [
-                "user"
-            ],
+            "required": ["user"],
             "type": "object",
             "properties": {
                 "id": {
@@ -1828,9 +1733,7 @@
             }
         },
         "Login": {
-            "required": [
-                "password"
-            ],
+            "required": ["password"],
             "type": "object",
             "properties": {
                 "username": {
@@ -1850,10 +1753,7 @@
             }
         },
         "PasswordChange": {
-            "required": [
-                "new_password1",
-                "new_password2"
-            ],
+            "required": ["new_password1", "new_password2"],
             "type": "object",
             "properties": {
                 "new_password1": {
@@ -1871,9 +1771,7 @@
             }
         },
         "PasswordReset": {
-            "required": [
-                "email"
-            ],
+            "required": ["email"],
             "type": "object",
             "properties": {
                 "email": {
@@ -1885,12 +1783,7 @@
             }
         },
         "PasswordResetConfirm": {
-            "required": [
-                "new_password1",
-                "new_password2",
-                "uid",
-                "token"
-            ],
+            "required": ["new_password1", "new_password2", "uid", "token"],
             "type": "object",
             "properties": {
                 "new_password1": {
@@ -1918,11 +1811,7 @@
             }
         },
         "Register": {
-            "required": [
-                "username",
-                "password1",
-                "password2"
-            ],
+            "required": ["username", "password1", "password2"],
             "type": "object",
             "properties": {
                 "username": {
@@ -1961,9 +1850,7 @@
             }
         },
         "VerifyEmail": {
-            "required": [
-                "key"
-            ],
+            "required": ["key"],
             "type": "object",
             "properties": {
                 "key": {
@@ -1991,9 +1878,7 @@
             }
         },
         "TokenVerify": {
-            "required": [
-                "token"
-            ],
+            "required": ["token"],
             "type": "object",
             "properties": {
                 "token": {
@@ -2004,9 +1889,7 @@
             }
         },
         "UserDetails": {
-            "required": [
-                "username"
-            ],
+            "required": ["username"],
             "type": "object",
             "properties": {
                 "pk": {
@@ -2042,10 +1925,7 @@
             }
         },
         "Follow": {
-            "required": [
-                "follower",
-                "following_user"
-            ],
+            "required": ["follower", "following_user"],
             "type": "object",
             "properties": {
                 "id": {
@@ -2056,11 +1936,7 @@
                 "status": {
                     "title": "Status",
                     "type": "string",
-                    "enum": [
-                        "requested",
-                        "accepted",
-                        "rejected"
-                    ]
+                    "enum": ["requested", "accepted", "rejected"]
                 },
                 "follower": {
                     "title": "Follower",
@@ -2073,11 +1949,7 @@
             }
         },
         "Page": {
-            "required": [
-                "user",
-                "book",
-                "diary"
-            ],
+            "required": ["user", "book", "diary"],
             "type": "object",
             "properties": {
                 "id": {
