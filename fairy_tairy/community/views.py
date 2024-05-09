@@ -21,8 +21,8 @@ class CommunityDiaryViewSet(GenericViewSet,
                   mixins.RetrieveModelMixin):
     
     permission_classes = [IsFollowerOrOwner]
-    serializer_class = CommunityDiarySerializer
     queryset = Diary.objects.all()
+    serializer_class = CommunityDiarySerializer
     
     def get_queryset(self):
         """

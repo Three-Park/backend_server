@@ -109,7 +109,10 @@ class DiaryViewSet(GenericViewSet,
                     "content": "일기 내용",
                     "is_open": true,
                     "registered_at": "2024-05-03T10:00:00Z",
-                    "last_update_at": "2024-05-03T10:00:00Z"
+                    "last_update_at": "2024-05-03T10:00:00Z",
+                    "music": null,
+                    "image_set": [],
+                    "emotion_set": [],
                 }
                 400
                 {'detail':  '오늘은 이미 일기를 작성했습니다.'}
