@@ -22,6 +22,6 @@ class CommunityDiarySerializer(serializers.ModelSerializer):
     #     return user.username
     
     def get_image_url(self,obj):
-        image = Image.objects.filter(id=obj.user.id).first()
+        image = Image.objects.filter(diary=obj).first()
         return image.image_url
     
