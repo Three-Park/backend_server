@@ -159,6 +159,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -167,15 +168,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',
-    'http://localhost:3000',
-    'http://localhost:8081', 
-    'http://43.202.125.125:8000',# 클라이언트의 주소로 변경해야 합니다.
-    'http://*'
-]
+CORS_ORIGIN_ALLOW_ALL=True 
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8080',
+#     'http://localhost:3000',
+#     'http://localhost:3001',
+#     'http://localhost:8081', 
+#     'http://43.202.125.125:8000',
+#     'http://43.202.125.125:8001',# 클라이언트의 주소로 변경해야 합니다.
+#     'http://*'
+# ]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
