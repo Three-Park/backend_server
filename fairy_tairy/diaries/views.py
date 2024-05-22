@@ -120,11 +120,11 @@ class DiaryViewSet(GenericViewSet,
         """
         now = datetime.now()
         date = now.date()
-        diary_exists = Diary.objects.filter(user=request.user, registered_at__date=date).exists()
-        if diary_exists:
-            return Response({'detail': '오늘은 이미 일기를 작성했습니다.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return super().create(request, *args, **kwargs)
+        # diary_exists = Diary.objects.filter(user=request.user, registered_at__date=date).exists()
+        # if diary_exists:
+        #     return Response({'detail': '오늘은 이미 일기를 작성했습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        return super().create(request, *args, **kwargs)
     
     
     def retrieve(self, request, *args, **kwargs):
