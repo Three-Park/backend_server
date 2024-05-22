@@ -79,6 +79,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     
     'corsheaders',
+    #ssl인증서
+    'sslserver',
 
     # crispy for filtering, search, sort
     # 'crispy_forms',
