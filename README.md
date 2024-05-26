@@ -3,8 +3,15 @@
 
  - EC2 Instance
 
-- Python 3.10.13
+ - Python 3.10.13
 
+## Proxy
+
+ - gunicorn
+ - nginx
+ - letsencrypt
+
+---
 ### set environment
     chmod +x install_packages.sh
     ./install_packages.sh
