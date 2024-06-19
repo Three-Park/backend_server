@@ -34,8 +34,8 @@
     3. python manage.py runserver
 
 ### set environment
-    chmod +x install_packages.sh
-    ./install_packages.sh
+    chmod +x install_packages_be.sh
+    ./install_packages_be.sh
 
 ### activate environment (if you use virtual env)
 virtual environment : be_env
