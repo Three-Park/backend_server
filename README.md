@@ -1,7 +1,10 @@
-# backend_server
-**Do Not Edit EC2 Directly, Push and Pull to EC2 Server**
+# backend_API
+**백엔드 API요청을 처리하는 코드입니다.**
 
-### Stacks
+    image generate, sentiment 분석, 음악추천기능의 경우 아래 주소 레포지토리의 GPU서버에서 동작합니다.(cuda필수)
+    https://github.com/Three-Park/genimg_server
+
+
 <div align=left>
  <img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"> 
  <br>
@@ -18,12 +21,19 @@
 </div>
 
 ---
+## Local
+
+로컬에서 runserver로 돌리려면 
+
+    1. git clone this repository
+    2. set environment (+ activate env)
+    3. python manage.py runserver
 
 ### set environment
     chmod +x install_packages.sh
     ./install_packages.sh
 
-### activate environment (server)
+### activate environment (if you use virtual env)
 virtual environment : be_env
 
     to activate: source be_env/bin/activate
